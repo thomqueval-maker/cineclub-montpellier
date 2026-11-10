@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f3ed">
+  <title>Ciné club — tes séances à Montpellier</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f5f3ed;
+      --white: #fffefa;
+      --ink: #1e2320;
+      --muted: #767b73;
+      --line: #e7e4da;
+      --green: #d6fa6b;
+      --green-dark: #1d3925;
+      --plum: #392b42;
+      --orange: #ff795f;
+      --shadow: 0 16px 40px rgba(41, 42, 32, .07);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--paper); color: var(--ink); }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    .app-shell { max-width: 1440px; margin: 0 auto; padding: 0 42px 64px; }
+    .topbar { height: 76px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); gap: 24px; }
+    .brand { display: flex; align-items: center; gap: 11px; color: var(--ink); text-decoration: none; font-size: 17px; font-weight: 790; letter-spacing: -.6px; white-space: nowrap; }
+    .brand-mark { width: 34px; height: 34px; border-radius: 12px 12px 12px 4px; background: var(--green); display: grid; place-items: center; color: var(--green-dark); transform: rotate(-4deg); }
+    .brand-mark svg { transform: rotate(4deg); }
+    .nav-links { display: flex; gap: 27px; margin-left: 55px; margin-right: auto; align-items: center; }
+    .nav-links a { color: #73766e; text-decoration: none; font-size: 13px; font-weight: 630; }
+    .nav-links a.active { color: var(--ink); }
+    .pass-mini { display: flex; align-items: center; gap: 9px; border: 1px solid #e4e7d9; background: #f7fbe9; border-radius: 999px; padding: 8px 12px 8px 9px; font-size: 11px; font-weight: 730; color: #344323; white-space: nowrap; }
+    .pass-mini .pass-dot { width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; background: var(--green); }
+    .top-action { background: var(--ink); color: white; border: 0; padding: 11px 16px; border-radius: 13px; font-size: 12px; font-weight: 720; display: flex; align-items: center; gap: 9px; white-space: nowrap; }
+    .top-action b { display: grid; place-items: center; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 7px; background: var(--green); color: var(--ink); font-size: 11px; }
+
+    .hero { margin-top: 27px; border-radius: 25px; background: #222a24; color: white; min-height: 224px; padding: 30px 36px; display: flex; align-items: center; justify-content: space-between; overflow: hidden; position: relative; }
+    .hero:after { content: ""; position: absolute; width: 420px; height: 420px; border: 1px solid rgba(214,250,107,.17); border-radius: 50%; right: 88px; top: -130px; box-shadow: 0 0 0 35px rgba(214,250,107,.025), 0 0 0 72px rgba(214,250,107,.025), 0 0 0 110px rgba(214,250,107,.02); pointer-events: none; }
+    .hero-copy { position: relative; z-index: 1; max-width: 610px; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 10px; text-transform: uppercase; letter-spacing: 1.25px; font-weight: 750; color: #d7efaa; margin-bottom: 17px; }
+    .eyebrow .live-dot { width: 7px; height: 7px; border-radius: 99px; background: var(--green); box-shadow: 0 0 0 4px rgba(214,250,107,.12); }
+    h1 { margin: 0; font-size: clamp(31px, 4vw, 49px); line-height: 1.02; letter-spacing: -2px; font-weight: 720; }
+    h1 span { color: var(--green); font-family: Georgia, "Times New Roman", serif; font-style: italic; font-weight: 500; }
+    .hero-copy p { font-size: 13px; line-height: 1.6; color: #c5cbc1; margin: 13px 0 0; max-width: 410px; }
+    .hero-stamp { z-index: 1; margin-right: 60px; width: 138px; height: 138px; border: 1px solid rgba(214,250,107,.35); border-radius: 50%; transform: rotate(9deg); color: var(--green); display: flex; align-items: center; justify-content: center; flex-direction: column; text-align: center; flex: 0 0 auto; }
+    .hero-stamp strong { font-size: 32px; letter-spacing: -1.8px; line-height: 1; }
+    .hero-stamp span { font-size: 9px; text-transform: uppercase; letter-spacing: 1.1px; margin-top: 7px; color: #dae3d0; }
+
+    .toolbar { display: flex; align-items: center; gap: 16px; margin-top: 25px; }
+    .search-box { height: 48px; display: flex; align-items: center; gap: 10px; flex: 1; border: 1px solid var(--line); border-radius: 14px; background: var(--white); padding: 0 15px; min-width: 190px; }
+    .search-box svg { color: #8c9088; flex: 0 0 auto; }
+    .search-box input { width: 100%; border: 0; outline: 0; background: transparent; color: var(--ink); font-size: 12px; }
+    .search-box input::placeholder { color: #a1a39c; }
+    .date-label { font-size: 11px; color: var(--muted); white-space: nowrap; }
+    .date-label strong { color: var(--ink); font-weight: 700; }
+    .date-nav { display: flex; align-items: center; gap: 6px; }
+    .date-btn { height: 43px; min-width: 64px; padding: 0 10px; border-radius: 12px; border: 1px solid transparent; background: transparent; color: #777b73; font-size: 10px; font-weight: 700; line-height: 1.15; }
+    .date-btn span { display: block; font-size: 9px; color: #a0a39a; font-weight: 550; margin-top: 4px; }
+    .date-btn.selected { background: var(--green); color: #22301e; }
+    .date-btn.selected span { color: #516044; }
+    .date-arrow { border: 1px solid var(--line); background: var(--white); border-radius: 11px; width: 36px; height: 36px; color: #73786e; display: grid; place-items: center; }
+
+    .venue-row { display: flex; align-items: center; gap: 14px; margin-top: 22px; flex-wrap: wrap; }
+    .venue-label { color: #83877e; font-size: 10px; text-transform: uppercase; font-weight: 750; letter-spacing: .85px; margin-right: 3px; }
+    .venue-group { display: flex; align-items: center; padding: 4px; gap: 3px; border: 1px solid var(--line); border-radius: 14px; background: #eeece5; }
+    .venue-btn { padding: 8px 14px; border: 0; border-radius: 10px; background: transparent; color: #6d726b; font-weight: 690; font-size: 11px; }
+    .venue-btn.selected { background: var(--white); box-shadow: 0 2px 5px rgba(0,0,0,.05); color: var(--ink); }
+    .venue-count { color: #999d94; font-size: 10px; margin-left: 4px; }
+    .cinema-note { font-size: 10px; color: #858a81; display: flex; align-items: center; gap: 6px; }
+    .cinema-note svg { color: #92988c; }
+
+    .main-grid { display: grid; grid-template-columns: minmax(0, 1fr) 295px; align-items: start; gap: 24px; margin-top: 28px; }
+    .results-head { display: flex; align-items: end; justify-content: space-between; margin-bottom: 14px; gap: 18px; }
+    .results-head h2 { font-size: 20px; letter-spacing: -.8px; margin: 0; font-weight: 740; }
+    .results-head p { margin: 6px 0 0; color: #858a81; font-size: 11px; }
+    .results-meta { color: #878c82; font-size: 10px; white-space: nowrap; }
+    .results-meta strong { color: #424941; }
+    .filter-row { display: flex; gap: 7px; align-items: center; flex-wrap: wrap; margin: 0 0 16px; }
+    .filter-chip { border: 1px solid var(--line); border-radius: 999px; background: transparent; padding: 8px 12px; color: #777c73; font-size: 10px; font-weight: 680; }
+    .filter-chip.selected { background: #e7f5c6; color: #314326; border-color: #e7f5c6; }
+    .filter-chip svg { vertical-align: -2px; margin-right: 4px; }
+    .demo-banner { display: flex; align-items: center; gap: 9px; padding: 10px 12px; border: 1px solid #dfe7d2; background: #f1f7e8; border-radius: 12px; color: #637253; font-size: 10px; line-height: 1.45; margin: 0 0 13px; }
+    .demo-banner svg { flex: 0 0 auto; color: #718b4c; }
+    .demo-banner #sourceMessage { flex: 1; }
+    .refresh-button { border: 0; background: #e0eccd; color: #435630; font-size: 9px; font-weight: 750; border-radius: 8px; padding: 7px 9px; white-space: nowrap; }
+    .refresh-button:disabled { opacity: .55; cursor: wait; }
+    .movie-list { display: flex; flex-direction: column; gap: 10px; }
+    .movie-card { background: var(--white); border: 1px solid #ebe8df; border-radius: 17px; padding: 12px; display: grid; grid-template-columns: 72px minmax(0,1fr); gap: 14px; box-shadow: 0 3px 12px rgba(52,50,39,.025); }
+    .poster { height: 96px; width: 72px; border-radius: 10px; overflow: hidden; position: relative; display: flex; align-items: end; padding: 8px; isolation: isolate; color: white; }
+    .poster:before, .poster:after { content: ""; position: absolute; z-index: -1; }
+    .poster:before { inset: 0; background: var(--poster-bg, linear-gradient(155deg,#5e3158,#da7c49)); }
+    .poster:after { width: 79px; height: 79px; right: -25px; top: -17px; border: 1px solid rgba(255,255,255,.5); border-radius: 50%; box-shadow: 0 0 0 8px rgba(255,255,255,.09), 0 0 0 17px rgba(255,255,255,.08); }
+    .poster-title { font-family: Georgia, serif; font-size: 11px; letter-spacing: -.3px; line-height: 1.04; text-shadow: 0 1px 8px rgba(0,0,0,.5); max-width: 58px; }
+    .poster img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+    .poster-title { position: relative; z-index: 1; }
+    .poster.p1 { --poster-bg: linear-gradient(145deg,#183b36 2%,#45664d 43%,#c98e56); }
+    .poster.p2 { --poster-bg: linear-gradient(145deg,#374460,#7e7597 48%,#d5a2ab); }
+    .poster.p3 { --poster-bg: linear-gradient(145deg,#5f222b,#a84f43 48%,#e4bd85); }
+    .poster.p4 { --poster-bg: linear-gradient(145deg,#1c293c,#426582 53%,#adc5c0); }
+    .poster.p5 { --poster-bg: linear-gradient(145deg,#393328,#766440 50%,#d0b26d); }
+    .poster.p6 { --poster-bg: linear-gradient(145deg,#422b4b,#945575 55%,#e89a8c); }
+    .movie-body { min-width: 0; }
+    .movie-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+    .movie-title { font-size: 14px; line-height: 1.2; font-weight: 760; letter-spacing: -.25px; margin: 1px 0 5px; }
+    .movie-sub { color: #8b8e86; font-size: 10px; }
+    .movie-extra { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 10px; margin-top: 6px; color: #858a81; font-size: 9px; line-height: 1.4; }
+    .movie-extra .rating { color: #4b5738; font-weight: 780; }
+    .movie-extra a { color: #68794f; text-decoration: none; }
+    .movie-extra a:hover { text-decoration: underline; }
+    .movie-synopsis { color: #82877d; font-size: 9px; line-height: 1.4; margin-top: 6px; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+    .fav-btn { border: 1px solid #eceae4; background: transparent; color: #888d82; border-radius: 10px; width: 32px; height: 32px; display: grid; place-items: center; flex: 0 0 auto; }
+    .fav-btn.active { color: #8d5a36; background: #fff1e3; border-color: #ffe6d0; }
+    .sessions { margin-top: 11px; display: flex; flex-direction: column; gap: 7px; }
+    .session-row { display: grid; grid-template-columns: minmax(135px,1fr) auto minmax(126px,auto); align-items: center; gap: 10px; padding: 8px 9px; background: #f7f6f0; border-radius: 11px; }
+    .session-venue { min-width: 0; display: flex; align-items: center; gap: 7px; color: #555b51; font-size: 10px; font-weight: 680; white-space: nowrap; }
+    .venue-dot { width: 7px; height: 7px; border-radius: 50%; background: #89ae4d; flex: 0 0 auto; }
+    .venue-dot.comedie { background: #cc8264; }
+    .session-label { display: flex; align-items: center; gap: 5px; margin-top: 4px; color: #999d93; font-size: 9px; font-weight: 520; }
+    .format-label { color: #55445f; border: 1px solid #e5ddea; background: #f5eff8; padding: 3px 6px; border-radius: 6px; font-size: 8px; font-weight: 760; text-transform: uppercase; letter-spacing: .25px; }
+    .format-label.standard { color: #71816c; border-color: #e3ead9; background: #f0f5ea; }
+    .price { font-size: 9px; font-weight: 730; color: #3d642d; white-space: nowrap; }
+    .price.premium { color: #9a582c; }
+    .time-link { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; border: 1px solid #dfe8cd; background: #faffef; border-radius: 9px; min-width: 120px; padding: 6px 9px; text-decoration: none; color: #344a2c; font-size: 12px; font-weight: 790; white-space: nowrap; }
+    .time-link:hover { background: var(--green); border-color: var(--green); }
+    .time-link svg { color: #788a68; }
+    .time-link small { font-size: 8px; font-weight: 660; color: #647757; }
+    .empty { text-align: center; padding: 46px 22px; border-radius: 18px; border: 1px dashed #dedbcf; color: #777b72; background: rgba(255,254,250,.56); }
+    .empty strong { display: block; color: #343a32; font-size: 14px; margin-bottom: 6px; }
+    .empty span { font-size: 11px; line-height: 1.5; }
+
+    .side-panel { background: #e9eee0; border: 1px solid #dfe6d5; border-radius: 19px; padding: 18px; position: sticky; top: 16px; }
+    .side-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .side-top h3 { margin: 0; font-size: 15px; letter-spacing: -.4px; }
+    .side-count { background: var(--green); border-radius: 8px; color: #435334; font-size: 9px; font-weight: 780; padding: 5px 7px; }
+    .side-caption { font-size: 10px; line-height: 1.5; color: #737d6a; margin: 8px 0 15px; }
+    .watch-list { display: flex; flex-direction: column; gap: 7px; }
+    .watch-item { display: flex; align-items: center; gap: 9px; min-height: 38px; padding: 7px 8px; background: rgba(255,255,255,.57); border-radius: 10px; }
+    .watch-star { color: #859a55; display: grid; place-items: center; }
+    .watch-name { flex: 1; min-width: 0; font-size: 10px; color: #525c4a; font-weight: 690; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .watch-remove { border: 0; background: none; color: #9ca393; padding: 2px; display: grid; place-items: center; }
+    .watch-empty { padding: 14px 10px; background: rgba(255,255,255,.45); border-radius: 10px; color: #7f8975; font-size: 10px; line-height: 1.45; }
+    .add-form { display: flex; gap: 6px; margin-top: 12px; }
+    .add-form input { width: 100%; min-width: 0; height: 37px; border-radius: 10px; padding: 0 10px; border: 1px solid #dbe2d2; background: rgba(255,255,255,.75); outline: 0; font-size: 10px; color: var(--ink); }
+    .add-form input:focus { border-color: #a5c46e; box-shadow: 0 0 0 3px rgba(165,196,110,.15); }
+    .add-form button { width: 38px; height: 37px; flex: 0 0 auto; border: 0; border-radius: 10px; background: var(--ink); color: white; display: grid; place-items: center; }
+    .side-divider { height: 1px; background: #d6dece; margin: 17px 0 15px; }
+    .pass-title { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 780; color: #34432d; }
+    .pass-title .pass-icon { display: grid; place-items: center; width: 25px; height: 25px; background: var(--green); border-radius: 8px; }
+    .pass-breakdown { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+    .pass-line { display: flex; justify-content: space-between; gap: 10px; color: #68735f; font-size: 9px; }
+    .pass-line strong { color: #34432d; font-weight: 760; white-space: nowrap; }
+    .price-note { font-size: 9px; line-height: 1.5; color: #818a78; margin: 11px 0 0; }
+    .price-note a { color: #596b48; text-decoration: underline; text-underline-offset: 2px; }
+    .footnote { margin: 24px 2px 0; color: #96998f; font-size: 9px; display: flex; justify-content: space-between; gap: 15px; }
+    .footnote a { color: #7d8379; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+    @media (max-width: 1000px) {
+      .app-shell { padding-left: 24px; padding-right: 24px; }
+      .main-grid { grid-template-columns: minmax(0,1fr) 260px; gap: 16px; }
+      .hero-stamp { margin-right: 18px; }
+      .toolbar { flex-wrap: wrap; }
+      .search-box { flex-basis: 100%; }
+      .date-label { margin-right: auto; }
+    }
+    @media (max-width: 720px) {
+      .app-shell { padding: 0 15px 38px; }
+      .topbar { height: 62px; gap: 10px; }
+      .nav-links, .pass-mini { display: none; }
+      .top-action { padding: 9px 11px; font-size: 10px; }
+      .hero { min-height: 205px; border-radius: 20px; margin-top: 17px; padding: 24px 21px; }
+      .hero:after { right: -166px; top: -95px; }
+      .hero-copy { max-width: 100%; }
+      .hero-copy p { font-size: 11px; max-width: 285px; }
+      .hero-stamp { display: none; }
+      .eyebrow { margin-bottom: 13px; }
+      .toolbar { margin-top: 16px; gap: 10px; }
+      .date-nav { width: 100%; justify-content: space-between; gap: 3px; }
+      .date-btn { min-width: 53px; padding: 0 4px; }
+      .date-arrow { display: none; }
+      .venue-row { margin-top: 15px; gap: 9px; }
+      .venue-label { width: 100%; }
+      .venue-btn { padding: 8px 11px; }
+      .cinema-note { width: 100%; }
+      .main-grid { display: flex; flex-direction: column; margin-top: 24px; gap: 18px; }
+      .results-section { width: 100%; }
+      .side-panel { width: 100%; position: static; order: -1; }
+      .side-panel.compact { display: none; }
+      .side-panel .side-divider, .side-panel .pass-title, .side-panel .pass-breakdown, .side-panel .price-note { display: none; }
+      .side-caption { margin-bottom: 10px; }
+      .watch-list { display: grid; grid-template-columns: 1fr 1fr; }
+      .add-form { margin-top: 9px; }
+      .results-head h2 { font-size: 18px; }
+      .movie-card { grid-template-columns: 60px minmax(0,1fr); gap: 10px; padding: 10px; }
+      .poster { width: 60px; height: 84px; }
+      .poster-title { font-size: 9px; }
+      .movie-title { font-size: 12px; }
+      .movie-sub { font-size: 9px; }
+      .session-row { grid-template-columns: minmax(0,1fr) auto; gap: 7px; }
+      .session-row .time-link { grid-column: 1 / -1; width: 100%; }
+      .session-venue { white-space: normal; }
+      .footnote { display: block; line-height: 1.6; }
+      .footnote span { display: block; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Ciné Club, accueil">
+        <span class="brand-mark" aria-hidden="true"><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M8 5.8c0-.78.86-1.26 1.53-.86l9.26 5.52a1.8 1.8 0 0 1 0 3.08l-9.26 5.52A1 1 0 0 1 8 18.2V5.8Z" fill="currentColor"/></svg></span>
+        <span>cinéclub<span style="color:#92ac5c">.</span></span>
+      </a>
+      <nav class="nav-links" aria-label="Navigation principale">
+        <a href="#seances" class="active">Les séances</a>
+        <a href="#ma-liste">Ma liste</a>
+        <a href="#tarifs">Mon CinéPass</a>
+      </nav>
+      <div class="pass-mini"><span class="pass-dot"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 3.5 14 9l5.5 2-5.5 2-2 5.5L10 13l-5.5-2L10 9l2-5.5Z" fill="#445731"/></svg></span> CinéPass activé</div>
+      <button id="topListButton" class="top-action" type="button">Ma liste <b id="navCount">0</b></button>
+    </header>
+
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="live-dot"></span> Montpellier · Pathé Odysseum &amp; Comédie</div>
+        <h1 id="hero-title">Ta prochaine séance,<br><span>sans prise de tête.</span></h1>
+        <p>Les films que tu veux, les horaires des deux cinés, et le supplément CinéPass affiché avant de choisir.</p>
+      </div>
+      <div class="hero-stamp" aria-label="Deux cinémas, une seule liste"><strong>2</strong><span>cinémas<br>une seule liste</span></div>
+    </section>
+
+    <section class="toolbar" aria-label="Recherche et choix du jour">
+      <label class="search-box">
+        <span class="sr-only">Rechercher un film</span>
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.5" stroke="currentColor" stroke-width="1.8"/><path d="m16 16 4.2 4.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <input id="searchInput" type="search" placeholder="Un film en tête ? Cherche-le ici…" autocomplete="off">
+      </label>
+      <div class="date-label">Séances du <strong id="selectedDateLabel">—</strong></div>
+      <div class="date-nav" id="dateNav" role="tablist" aria-label="Jour des séances"></div>
+    </section>
+
+    <section class="venue-row" aria-label="Choisir le cinéma">
+      <span class="venue-label">Où tu veux le voir ?</span>
+      <div class="venue-group" role="group" aria-label="Filtrer par cinéma">
+        <button class="venue-btn selected" data-cinema="all" type="button">Les deux <span class="venue-count">02</span></button>
+        <button class="venue-btn" data-cinema="odysseum" type="button">Odysseum</button>
+        <button class="venue-btn" data-cinema="comedie" type="button">Comédie</button>
+      </div>
+      <span class="cinema-note"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 21s7-5.2 7-11a7 7 0 1 0-14 0c0 5.8 7 11 7 11Z" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="10" r="2.3" stroke="currentColor" stroke-width="1.7"/></svg>Choisis une salle ou compare les deux</span>
+    </section>
+
+    <div class="main-grid">
+      <main class="results-section" id="seances">
+        <div class="results-head">
+          <div><h2 id="resultsTitle">À l’affiche aujourd’hui</h2><p id="resultsSubtitle">Tout ce qui passe dans tes deux cinémas</p></div>
+          <div class="results-meta"><strong id="movieCount">0</strong> films · <strong id="sessionCount">0</strong> séances</div>
+        </div>
+        <div class="filter-row" role="group" aria-label="Filtres de séance">
+          <button class="filter-chip selected" data-filter="all" type="button">Tout voir</button>
+          <button class="filter-chip" data-filter="included" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="m5 12 4.3 4.3L19 6.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Sans supplément</button>
+          <button class="filter-chip" data-filter="premium" type="button">IMAX / 4DX</button>
+          <button class="filter-chip" data-filter="favorites" type="button">★ Mes films</button>
+        </div>
+        <div class="demo-banner" role="status">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><path d="M12 11v5m0-8h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <span id="sourceMessage">Connexion aux horaires Pathé en cours…</span>
+          <button id="refreshButton" class="refresh-button" type="button">Actualiser</button>
+        </div>
+        <div id="movieList" class="movie-list" aria-live="polite"></div>
+      </main>
+
+      <aside class="side-panel" id="ma-liste" aria-label="Ma liste de films">
+        <div class="side-top"><h3>Ma liste à voir</h3><span class="side-count" id="watchCount">0 film</span></div>
+        <p class="side-caption">Garde tes envies ici. On te montre tout de suite si une séance correspond.</p>
+        <div id="watchList" class="watch-list"></div>
+        <form class="add-form" id="addForm">
+          <label class="sr-only" for="addMovie">Ajouter un film à ma liste</label>
+          <input id="addMovie" type="text" placeholder="Ajouter un film à voir…" maxlength="80">
+          <button type="submit" aria-label="Ajouter le film"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        </form>
+        <div class="side-divider"></div>
+        <div id="tarifs" class="pass-title"><span class="pass-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 3.5 14 9l5.5 2-5.5 2-2 5.5L10 13l-5.5-2L10 9l2-5.5Z" fill="#445731"/></svg></span> Ton CinéPass, en clair</div>
+        <div class="pass-breakdown">
+          <div class="pass-line"><span>Séance classique</span><strong>incluse · 0 €</strong></div>
+          <div class="pass-line"><span>Séance 3D classique</span><strong>+ 2 €</strong></div>
+          <div class="pass-line"><span>IMAX / 4DX standard</span><strong>+ 8 €</strong></div>
+          <div class="pass-line"><span>IMAX / 4DX en 3D</span><strong>+ 9 €</strong></div>
+          <div class="pass-line"><span>IMAX 70 mm</span><strong>+ 12 €</strong></div>
+        </div>
+        <p class="price-note">Lunettes 3D : +1 € si nécessaire. Le tarif de réservation Pathé fait foi. <a href="https://www.pathe.fr/cinemas/cinema-pathe-odysseum" target="_blank" rel="noreferrer">Voir les tarifs officiels ↗</a></p>
+      </aside>
+    </div>
+    <footer class="footnote"><span>Prototype personnel, non affilié à Pathé ou AlloCiné. Les liens ouvrent la billetterie Pathé.</span><span>Notes et affiches AlloCiné <a href="https://www.allocine.fr/" target="_blank" rel="noreferrer">selon disponibilité ↗</a></span></footer>
+  </div>
+
+  <script>
+    if (location.protocol === 'file:') {
+      document.getElementById('sourceMessage').textContent = 'Pour charger les séances en direct, lance start-cineclub.bat dans le dossier du site. Il ouvrira cette page avec le serveur local.';
+      const launchHint = document.getElementById('refreshButton');
+      launchHint.textContent = 'Serveur requis';
+      launchHint.disabled = true;
+      launchHint.title = 'Lance start-cineclub.bat dans le dossier du site.';
+    }
+  </script>
+  <script src="app.js" defer></script>
+</body>
+</html>
